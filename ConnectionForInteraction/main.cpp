@@ -12,6 +12,6 @@ int main(int argc, char **argv)
 	Connect c;
 	int port = DEFAULT_PORT;
 	char *ip_adress = IP_ADRESS;
-	//c.connectToHost(port, ip_adress);
+	c.connectToHost(port, ip_adress);
 	return 0;
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <winsock2.h>
-#include <winsock.h>
+//#include <winsock.h>
 #include <ws2tcpip.h> 
 #include <iostream>
 #include <windows.h>
@@ -12,6 +12,8 @@
 
 #define DEFAULT_BUFFER 512
 
+#pragma warning (disable:4996)
+#pragma comment(lib, "ws2_32.lib")
 
 class Connect
 {
@@ -41,8 +43,7 @@ public:
 
 		target.sin_family = AF_INET; // address family Internet
 		target.sin_port = htons(PortNo); //Port to connect on
-										 //target.sin_addr.s_addr = inet_addr(IPAddress); //Target IP //this was not allowed anymore! used InetPton instead.
-		InetPton(AF_INET, IPAddress, &target.sin_addr.s_addr);
+		target.sin_addr.s_addr = inet_addr(IPAddress); //Target IP //this was not allowed anymore! -> added pragma warning
 		s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Create socket
 		if (s == INVALID_SOCKET)
 		{
@@ -53,11 +54,14 @@ public:
 
 		if (connect(s, (SOCKADDR *)&target, sizeof(target)) == SOCKET_ERROR)
 		{
+			printf("No server socket found to connect to!\n");
+			getchar();
 			return false; //Couldn't connect
 		}
 		else
 			return true; //Success
 	}
+
 	//CLOSECONNECTION – shuts down the socket and closes any connection on it
 	void CloseConnection()
 	{
