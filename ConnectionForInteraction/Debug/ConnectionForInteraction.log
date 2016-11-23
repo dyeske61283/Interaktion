@@ -1,5 +1,4 @@
 ﻿  main.cpp
-  Connect.cpp
-  Generating Code...
-  ConnectionForInteraction.vcxproj -> C:\Users\kevin\Documents\Visual Studio 2015\Projects\AwesomeTutorial\ConnectionForInteraction\Debug\ConnectionForInteraction.exe
-  ConnectionForInteraction.vcxproj -> C:\Users\kevin\Documents\Visual Studio 2015\Projects\AwesomeTutorial\ConnectionForInteraction\Debug\ConnectionForInteraction.pdb (Partial PDB)
+c:\users\tobi\source\repos\interaktion\connectionforinteraction\main.cpp(12): warning C4101: "c": Unreferenzierte lokale Variable
+  ConnectionForInteraction.vcxproj -> C:\Users\Tobi\Source\Repos\Interaktion\Debug\ConnectionForInteraction.exe
+  ConnectionForInteraction.vcxproj -> C:\Users\Tobi\Source\Repos\Interaktion\Debug\ConnectionForInteraction.pdb (Partial PDB)
