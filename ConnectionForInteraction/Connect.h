@@ -24,9 +24,17 @@ private:
 	int iResult;
 	char recvBuffer[DEFAULT_BUFFER];
 	char sendBuffer[DEFAULT_BUFFER];
-
+	int Port;
+	char* IPAddress = "";
 public:
-	bool connectToHost(int PortNo, char* IPAddress)
+
+	Connect(int Port, char* IP)
+	{
+		this->Port = Port;
+		this->IPAddress = IP;
+	}
+
+	bool connectToHost()
 	{
 		iResult = WSAStartup(SCK_VERSION2, &wsadata);
 
@@ -42,8 +50,8 @@ public:
 		SOCKADDR_IN target; //Socket address information
 
 		target.sin_family = AF_INET; // address family Internet
-		target.sin_port = htons(PortNo); //Port to connect on
-		target.sin_addr.s_addr = inet_addr(IPAddress); //Target IP //this was not allowed anymore! -> added pragma warning
+		target.sin_port = htons(this->Port); //Port to connect on
+		target.sin_addr.s_addr = inet_addr(this->IPAddress); //Target IP //this was not allowed anymore! -> added pragma warning
 		s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Create socket
 		if (s == INVALID_SOCKET)
 		{
@@ -88,4 +96,3 @@ public:
 
 };
 
-//timestamp: 21:04
