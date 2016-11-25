@@ -13,7 +13,8 @@ int main(int argc, char **argv)
 	Connect c(port, ip_adress);
 
 	c.connectToHost();
-	c.CloseConnection();
+
+	c.closeConnection();
 	return 0;
 
 }

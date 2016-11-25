@@ -1,6 +1,6 @@
 #pragma once
 #include <winsock2.h>
-//#include <winsock.h>
+#include <winsock.h>
 #include <ws2tcpip.h> 
 #include <iostream>
 #include <windows.h>
@@ -71,7 +71,7 @@ public:
 	}
 
 	//CLOSECONNECTION – shuts down the socket and closes any connection on it
-	void CloseConnection()
+	void closeConnection()
 	{
 		//Close the socket if it exists
 		if (s)
@@ -89,7 +89,7 @@ public:
 		recv(s, recvBuffer, sizeof(recvBuffer) - 1, 0);
 	}
 
-	void sendData(char *buffer)
+	void sendData()
 	{
 		send(s, sendBuffer, DEFAULT_BUFFER, 0);
 	}
