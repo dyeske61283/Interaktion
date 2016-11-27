@@ -110,10 +110,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="control.cpp" />
+    <ClCompile Include="decode.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="realtime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Connect.h" />
+    <ClInclude Include="basics.h" />
+    <ClInclude Include="control.h" />
+    <ClInclude Include="decode.h" />
+    <ClInclude Include="protocol.h" />
+    <ClInclude Include="realtime.h" />
+    <ClInclude Include="_unistd_h.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
