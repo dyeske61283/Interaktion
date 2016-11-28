@@ -6,6 +6,8 @@
 #define IP_ADRESS "192.168.2.1"
 #pragma comment(lib, "ws2_32.lib")
 #pragma warning (disable:4996)
+
+
 int main(int argc, char **argv)
 {
 	int port = DEFAULT_PORT;
@@ -22,6 +24,7 @@ int main(int argc, char **argv)
 		getchar();
 		return EXIT_FAILURE;
 	}
+	k.move(-20, 10);
 	k.close();
 	
 

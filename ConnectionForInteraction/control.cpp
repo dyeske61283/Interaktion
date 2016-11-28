@@ -157,7 +157,7 @@ namespace sumo {
 	{
 		uint8_t buf[65535];
 		while (!_stop) {
-			ssize_t len = read(_udp, buf, sizeof(buf));
+			ssize_t len = recv(_udp,(char*) buf, sizeof(buf),0);
 			if (len == -1)
 				break;
 
@@ -283,6 +283,9 @@ namespace sumo {
 		addr.sin_family = AF_INET;
 		addr.sin_addr.s_addr = inet_addr("192.168.2.1");
 		addr.sin_port = htons(54321);
+
+		
+		
 		ssize_t ret = ::sendto(_udp, (const char*)&b, b.head.size, 0, (struct sockaddr *) &addr, sizeof(addr));
 		if (ret < 0) {
 			perror("write failed");
@@ -416,13 +419,13 @@ namespace sumo {
 		}
 
 		char buffer[1024] = "{\"controller_name\":\"PC\",\"controller_type\":\"PC\",\"d2c_port\":54321}";
-		write(sockfd, buffer, strlen(buffer));
-		size_t len = read(sockfd, buffer, 1024);
-
+		sendto(sockfd, buffer, strlen(buffer),0,0,0);//
+		size_t len = recv(sockfd, buffer, 1024,0);
+		
 		buffer[len] = '\0';
 		printf("config: '%s'\n", buffer);
 
-		::close(sockfd);
+		closesocket(sockfd);
 
 		_udp = socket(AF_INET, SOCK_DGRAM, 0);
 		if (_udp < 0) {
@@ -476,7 +479,7 @@ namespace sumo {
 		enableStuff();
 
 		_rt->activateControl(true);
-		//_rt->activateHeartBeatOut(true);
+		//	_rt->activateHeartBeatOut(true);
 
 		return true;
 

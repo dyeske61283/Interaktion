@@ -112,7 +112,7 @@ namespace sumo
 		T param;
 
 		ioctl(uint8_t seq, uint8_t t, uint8_t fu, uint8_t flags = 0) :
-		ioctl_packet(seq, sizeof(*this), t, fu, flags)
+			ioctl_packet(seq, sizeof(*this), t, fu, flags)
 			//param()
 		{ }
 	};// __attribute__((packed));
