@@ -121,7 +121,6 @@
     <ClInclude Include="decode.h" />
     <ClInclude Include="protocol.h" />
     <ClInclude Include="realtime.h" />
-    <ClInclude Include="_unistd_h.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

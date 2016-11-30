@@ -155,18 +155,23 @@ namespace sumo {
 	{
 		uint8_t buf[65535];
 		while (!_stop) {
-			ssize_t len = recv(_udp,(char*) buf, sizeof(buf),0);
-			if (len == -1)
+
+			int len = recv(_udp,(char*)buf, sizeof(buf),0); //mh
+			if (len <= 0)
+			{
+				printf("problems with recv dispatch()\n");
 				break;
+			}
 
 			uint8_t *p = buf;
-			//udpIn(buf, len);
+			udpIn(buf, len);
 			while (len) {
 				struct header *hdr = (struct header *) p;
 				if (hdr->size > len) {
 					fprintf(stderr, "not enough data in this packet, packet needs reassembly TODO\n");
 					break;
 				}
+
 				switch (hdr->type) {
 
 				case SYNC:
@@ -274,7 +279,7 @@ namespace sumo {
 	{
 		std::lock_guard<std::mutex> __g(_send_lock);
 
-		//udpOut((uint8_t *) &b, b.head.size);
+		udpOut((uint8_t *) &b, b.head.size);
 
 		struct sockaddr_in addr;
 		memset(&addr, 0, sizeof(addr));
@@ -284,9 +289,9 @@ namespace sumo {
 
 		
 		
-		ssize_t ret = ::sendto(_udp, (const char*)&b, b.head.size, 0, (struct sockaddr *) &addr, sizeof(addr));
+		int ret = ::sendto(_udp, (const char*)&b, b.head.size, 0, (struct sockaddr *) &addr, sizeof(addr));
 		if (ret < 0) {
-			perror("write failed");
+			perror("sendto failed");
 			return false;
 		}
 		if (ret != b.head.size) {
@@ -454,7 +459,7 @@ namespace sumo {
 		//else {
 		//	fprintf(stderr, "WARNING: no image display or processing object present. Images will be dropped\n");
 
-		//}
+		////}
 
 		_ctrl_in = new ControlIn(this);
 		_ctrl_in->reset();
@@ -482,14 +487,14 @@ namespace sumo {
 		return true;
 
 	bind_error:
-		::close(_udp);
+		closesocket(_udp);
 
 		return false;
 	}
 
 	void Control::close()
 	{
-		::close(_udp); /* close udp before so that a blocking recv waked up */
+		closesocket(_udp); /* close udp before so that a blocking recv waked up */
 		stop();
 		_dispatch_thread.join();
 

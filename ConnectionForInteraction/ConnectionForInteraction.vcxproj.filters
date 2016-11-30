@@ -41,9 +41,6 @@
     <ClInclude Include="control.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="_unistd_h.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="decode.h">
       <Filter>Header Files</Filter>
     </ClInclude>

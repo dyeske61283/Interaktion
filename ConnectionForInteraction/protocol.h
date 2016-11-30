@@ -22,7 +22,7 @@
 #ifndef SUMO_PROTOCOL
 #define SUMO_PROTOCOL
 
-#include <cstdint>
+#include <stdint.h>
 
 #define ACK   1
 #define SYNC  2

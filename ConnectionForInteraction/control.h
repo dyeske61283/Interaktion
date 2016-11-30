@@ -64,7 +64,7 @@ namespace sumo {
 	public:
 		Control(/*Image *image mh*/) : _udp(-1), _send_lock(), _rt(0), /*_image(image), mh*/ _rt_thread_in(), _rt_thread_out(), /*_image_thread(), mh*/ _seqno(0)
 		{
-			printf("class control constructor\n");
+			//printf("class control constructor\n");
 		}
 		~Control();
 

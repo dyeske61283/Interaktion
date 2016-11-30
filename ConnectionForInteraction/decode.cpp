@@ -22,7 +22,6 @@
 #include <cstdint>
 #include <cstring>
 #include <stdio.h>
-//#include "common.h"
 
 #include <cassert>
 #include <cmath>

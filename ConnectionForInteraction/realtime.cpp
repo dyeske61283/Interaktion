@@ -25,46 +25,46 @@
 #include "control.h"
 #include <Windows.h>
 
-//#define BILLION                             (1E9)
-//
-//static BOOL g_first_time = 1;
-//static LARGE_INTEGER g_counts_per_sec;
-//
-//int clock_gettime(int dummy, struct timespec *ct)
-//{
-//	LARGE_INTEGER count;
-//	printf("clock_gettime\n");
-//	if (g_first_time)
-//	{
-//		g_first_time = 0;
-//
-//		if (0 == QueryPerformanceFrequency(&g_counts_per_sec))
-//		{
-//			g_counts_per_sec.QuadPart = 0;
-//		}
-//	}
-//
-//	if ((NULL == ct) || (g_counts_per_sec.QuadPart <= 0) ||
-//		(0 == QueryPerformanceCounter(&count)))
-//	{
-//		return -1;
-//	}
-//
-//	ct->tv_sec = count.QuadPart / g_counts_per_sec.QuadPart;
-//	ct->tv_nsec = ((count.QuadPart % g_counts_per_sec.QuadPart) * BILLION) / g_counts_per_sec.QuadPart;
-//
-//	return 0;
-//}
+#define BILLION                             (1E9)
 
-//struct timespec { long tv_sec; long tv_nsec; };    //header part
-int clock_gettime(int, struct timespec *spec)      //C-file part
+static BOOL g_first_time = 1;
+static LARGE_INTEGER g_counts_per_sec;
+
+int clock_gettime(int dummy, struct timespec *ct)
 {
-	__int64 wintime; GetSystemTimeAsFileTime((FILETIME*)&wintime);
-	wintime -= 116444736000000000i64;  //1jan1601 to 1jan1970
-	spec->tv_sec = wintime / 10000000i64;           //seconds
-	spec->tv_nsec = wintime % 10000000i64 * 100;      //nano-seconds
+	LARGE_INTEGER count;
+	printf("clock_gettime\n");
+	if (g_first_time)
+	{
+		g_first_time = 0;
+
+		if (0 == QueryPerformanceFrequency(&g_counts_per_sec))
+		{
+			g_counts_per_sec.QuadPart = 0;
+		}
+	}
+
+	if ((NULL == ct) || (g_counts_per_sec.QuadPart <= 0) ||
+		(0 == QueryPerformanceCounter(&count)))
+	{
+		return -1;
+	}
+
+	ct->tv_sec = count.QuadPart / g_counts_per_sec.QuadPart;
+	ct->tv_nsec = ((count.QuadPart % g_counts_per_sec.QuadPart) * BILLION) / g_counts_per_sec.QuadPart;
+
 	return 0;
 }
+
+//struct timespec { long tv_sec; long tv_nsec; };    //header part
+//int clock_gettime(int, struct timespec *spec)      //C-file part
+//{
+//	__int64 wintime; GetSystemTimeAsFileTime((FILETIME*)&wintime);
+//	wintime -= 116444736000000000i64;  //1jan1601 to 1jan1970
+//	spec->tv_sec = wintime / 10000000i64;           //seconds
+//	spec->tv_nsec = wintime % 10000000i64 * 100;      //nano-seconds
+//	return 0;
+//}
 
 namespace sumo {
 
@@ -72,6 +72,7 @@ namespace sumo {
 	void RealTime::heartBeatIn()
 	{
 		while (!_stop) {
+
 			uint8_t *b = _in.getMessage();
 			if (!b)
 				break;
