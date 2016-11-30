@@ -25,34 +25,44 @@
 #include "control.h"
 #include <Windows.h>
 
-#define BILLION                             (1E9)
+//#define BILLION                             (1E9)
+//
+//static BOOL g_first_time = 1;
+//static LARGE_INTEGER g_counts_per_sec;
+//
+//int clock_gettime(int dummy, struct timespec *ct)
+//{
+//	LARGE_INTEGER count;
+//	printf("clock_gettime\n");
+//	if (g_first_time)
+//	{
+//		g_first_time = 0;
+//
+//		if (0 == QueryPerformanceFrequency(&g_counts_per_sec))
+//		{
+//			g_counts_per_sec.QuadPart = 0;
+//		}
+//	}
+//
+//	if ((NULL == ct) || (g_counts_per_sec.QuadPart <= 0) ||
+//		(0 == QueryPerformanceCounter(&count)))
+//	{
+//		return -1;
+//	}
+//
+//	ct->tv_sec = count.QuadPart / g_counts_per_sec.QuadPart;
+//	ct->tv_nsec = ((count.QuadPart % g_counts_per_sec.QuadPart) * BILLION) / g_counts_per_sec.QuadPart;
+//
+//	return 0;
+//}
 
-static BOOL g_first_time = 1;
-static LARGE_INTEGER g_counts_per_sec;
-
-int clock_gettime(int dummy, struct timespec *ct)
+//struct timespec { long tv_sec; long tv_nsec; };    //header part
+int clock_gettime(int, struct timespec *spec)      //C-file part
 {
-	LARGE_INTEGER count;
-
-	if (g_first_time)
-	{
-		g_first_time = 0;
-
-		if (0 == QueryPerformanceFrequency(&g_counts_per_sec))
-		{
-			g_counts_per_sec.QuadPart = 0;
-		}
-	}
-
-	if ((NULL == ct) || (g_counts_per_sec.QuadPart <= 0) ||
-		(0 == QueryPerformanceCounter(&count)))
-	{
-		return -1;
-	}
-
-	ct->tv_sec = count.QuadPart / g_counts_per_sec.QuadPart;
-	ct->tv_nsec = ((count.QuadPart % g_counts_per_sec.QuadPart) * BILLION) / g_counts_per_sec.QuadPart;
-
+	__int64 wintime; GetSystemTimeAsFileTime((FILETIME*)&wintime);
+	wintime -= 116444736000000000i64;  //1jan1601 to 1jan1970
+	spec->tv_sec = wintime / 10000000i64;           //seconds
+	spec->tv_nsec = wintime % 10000000i64 * 100;      //nano-seconds
 	return 0;
 }
 
@@ -67,10 +77,10 @@ namespace sumo {
 				break;
 
 			auto *s = reinterpret_cast<struct sync *>(b);
-			//printf("HEARTBEAT: %d %d %d.%09d\n", s->head.ext, s->head.seqno, s->seconds, s->nanoseconds);
+			printf("HEARTBEAT: %d %d %d.%09d\n", s->head.ext, s->head.seqno, s->seconds, s->nanoseconds);
 			s->head.ext = 1;
 			_dp->send(*s);
-			delete[] b;
+			delete[] b;//<- wsl ist hier der fehler
 		}
 	}
 
@@ -89,7 +99,7 @@ namespace sumo {
 				}
 				else {
 					struct timespec tp;
-					if (clock_gettime(/*CLOCK_MONOTONIC*/ 1, &tp) != 0) {
+					if (clock_gettime(1, &tp) != 0) {
 						msleep(10);
 						continue;
 					}

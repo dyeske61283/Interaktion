@@ -29,9 +29,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Connect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="basics.h">
       <Filter>Header Files</Filter>
     </ClInclude>

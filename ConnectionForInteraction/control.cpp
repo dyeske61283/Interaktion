@@ -24,8 +24,6 @@
 #include <winsock2.h>
 #include <winsock.h>
 #include <sys/types.h>
-//#include <netinet/in.h>
-//#include <arpa/inet.h>
 #include <stdio.h>
 #include "_unistd_h.h"
 #include <windows.h>
@@ -235,22 +233,22 @@ namespace sumo {
 	void Control::sendDate()
 	{
 		time_t t = ::time(0);
-		struct tm *tm;
-		tm = localtime(&t);
+		struct tm malinas_tm;
+		localtime_s(&malinas_tm, &t);
 
 		struct date d(_seqno++);
-		strftime(d.param, sizeof(d.param), "%F", tm);
+		strftime(d.param, sizeof(d.param), "%Y-%m-%d", &malinas_tm);
 		blockingSend(d);
 	}
 
 	void Control::sendTime()
 	{
 		time_t t = ::time(0);
-		struct tm *tm;
-		tm = localtime(&t);
+		struct tm malinas_tm;
+		localtime_s(&malinas_tm, &t);
 
 		struct time p(_seqno++);
-		strftime(p.param, sizeof(p.param), "T%H%M%S%z", tm);
+		strftime(p.param, sizeof(p.param), "T%H%M%S%z", &malinas_tm);
 		blockingSend(p);
 	}
 

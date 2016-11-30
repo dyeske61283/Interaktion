@@ -116,7 +116,6 @@
     <ClCompile Include="realtime.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Connect.h" />
     <ClInclude Include="basics.h" />
     <ClInclude Include="control.h" />
     <ClInclude Include="decode.h" />
