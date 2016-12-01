@@ -25,7 +25,7 @@
 #include <winsock.h>
 #include <sys/types.h>
 #include <stdio.h>
-#include "_unistd_h.h"
+//#include "_unistd_h.h"
 #include <windows.h>
 #include <stdlib.h>
 #include <ws2tcpip.h> 
@@ -156,13 +156,13 @@ namespace sumo {
 		uint8_t buf[65535];
 		while (!_stop) {
 
-			int len = recv(_udp,(char*)buf, sizeof(buf),0); //mh
+			int len = recvfrom(_udp,(char*)buf, sizeof(buf),0, 0, 0);
+			//buf[len] = '\0';
 			if (len <= 0)
 			{
 				printf("problems with recv dispatch()\n");
 				break;
 			}
-
 			uint8_t *p = buf;
 			udpIn(buf, len);
 			while (len) {
@@ -420,12 +420,12 @@ namespace sumo {
 			fprintf(stderr, "connect failed\n");
 			return false;
 		}
-
-		char buffer[1024] = "{\"controller_name\":\"PC\",\"controller_type\":\"PC\",\"d2c_port\":54321}";
-		sendto(sockfd, buffer, strlen(buffer),0,0,0);//
-		size_t len = recv(sockfd, buffer, 1024,0);
-		
-		buffer[len] = '\0';
+		int serveraddrSize = sizeof(servaddr);
+		int* serveraddSizePtr = &serveraddrSize;
+		uint8_t buffer[1024] = "{\"controller_name\":\"PC\",\"controller_type\":\"PC\",\"d2c_port\":54321}";
+		sendto(sockfd, (char*)buffer, sizeof(buffer),0,0,0);//
+		int len = recvfrom(sockfd, (char*)buffer, 1024,0, (struct sockaddr *) &servaddr, serveraddSizePtr);
+		//buffer[len] = '\0';
 		printf("config: '%s'\n", buffer);
 
 		closesocket(sockfd);
