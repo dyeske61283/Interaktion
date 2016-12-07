@@ -156,8 +156,7 @@ namespace sumo {
 		uint8_t buf[65535];
 		while (!_stop) {
 
-			int len = recvfrom(_udp,(char*)buf, sizeof(buf),0, 0, 0);
-			//buf[len] = '\0';
+			int len = recvfrom(_udp,(char*)buf, (uint8_t)sizeof(buf),0, INADDR_ANY, 0);
 			if (len <= 0)
 			{
 				printf("problems with recv dispatch()\n");
@@ -289,7 +288,7 @@ namespace sumo {
 
 		
 		
-		int ret = ::sendto(_udp, (const char*)&b, b.head.size, 0, (struct sockaddr *) &addr, sizeof(addr));
+		int ret = ::sendto(_udp, (const char*)&b, (uint8_t)b.head.size, 0, (struct sockaddr *) &addr, sizeof(addr));
 		if (ret < 0) {
 			perror("sendto failed");
 			return false;
@@ -422,10 +421,10 @@ namespace sumo {
 		}
 		int serveraddrSize = sizeof(servaddr);
 		int* serveraddSizePtr = &serveraddrSize;
-		uint8_t buffer[1024] = "{\"controller_name\":\"PC\",\"controller_type\":\"PC\",\"d2c_port\":54321}";
+		char buffer[1024] = "{\"controller_name\":\"PC\",\"controller_type\":\"PC\",\"d2c_port\":54321}";
 		sendto(sockfd, (char*)buffer, sizeof(buffer),0,0,0);//
-		int len = recvfrom(sockfd, (char*)buffer, 1024,0, (struct sockaddr *) &servaddr, serveraddSizePtr);
-		//buffer[len] = '\0';
+		int len = recvfrom(sockfd, buffer, 1024,0, (struct sockaddr *) &servaddr, serveraddSizePtr);
+		buffer[len] = '\0';
 		printf("config: '%s'\n", buffer);
 
 		closesocket(sockfd);
